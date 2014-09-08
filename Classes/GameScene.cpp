@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "GameDefine.h"
+#include "MovedTile.h"
 USING_NS_CC;
 
 GameScene::GameScene()
@@ -65,5 +66,12 @@ bool GameScene::init()
 		}
 		
 	}
+	//初始化数字块
+	auto tile = MovedTile::create();
+	int num = rand()%16;
+	tile->moveTo(num/GAME_ROWS, num%GAME_COLS);
+	colorBack->addChild(tile);
+	//分数
+
 	return true;
 }
