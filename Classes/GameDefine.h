@@ -10,4 +10,11 @@ const int GAME_TILE_GAP = 2;
 
 const int GAME_ROWS =4;
 const int GAME_COLS = 4;
+enum class E_MOVE_DIRECT
+{
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
+};
 #endif // GameDefine_h__

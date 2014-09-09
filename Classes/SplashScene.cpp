@@ -52,7 +52,7 @@ bool Splash::init()
 	addChild(labelGameAut);
 
 	//计划任务3s后跳转到下一个场景
-	this->scheduleOnce(schedule_selector(Splash::JumpToGame),3.0f);
+	this->scheduleOnce(schedule_selector(Splash::JumpToGame),/*3.0*/0.5f);
 	return true;
 }
 
