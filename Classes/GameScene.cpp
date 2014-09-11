@@ -190,41 +190,226 @@ void GameScene::newMoveTile()
 
 void GameScene::moveUp()//从此看起
 {
-	//移动所有的块
+	//向上移动所有的块
 	for (int col = 0;col<GAME_COLS; col++)
 	{
 		for (int row = GAME_ROWS-1;row>=0;row--)//row>0改为row>=0
 		{
-			if (map[row][col]>0)
+			if (map[row][col]>0)//如果某一块有数字
 			{
-				for (int row1 =row;row1<GAME_ROWS-1;row1++)
+				for (int row1 =row;row1<GAME_ROWS-1;row1++)//判断这一块上面所有
 				{
 					if(map[row1+1][col]==0)
 					{
+						//逻辑砖块
 						map[row1+1][col] = map[row1][col];
 						map[row1][col] = 0;
-						m_allTile.at(map[row1+1][col]-1)->moveTo(row1+1,col);
-					}else
+
+						//实际砖块，减一得下标
+						m_allTile.at(  map[row1+1][col]  - 1)->moveTo(row1+1,col);
+					}
+					else
 					{
+						//判断是否可以消除
+						int numObj = m_allTile.at(map[row1+1][col]-1)->m_number;
+						int numNow = m_allTile.at(map[row1][col]-1)->m_number;
+						if (numObj==numNow)
+						{
+							
+							m_allTile.at(map[row1+1][col] - 1)->doubleNumber();
+							m_allTile.at(map[row1][col]-1)->removeFromParent();
+							int index = map[row1][col];
+							m_allTile.erase(map[row1][col]-1);
+
+							//块数减一，重新布局map[row1][col]所代表数字
+							
+							for (int r = 0; r < GAME_ROWS; r++)
+							{
+								for (int c = 0; c < GAME_COLS; c++)
+								{
+									if (map[r][c]>index)
+									{
+										map[r][c]--;
+									}
+								}
+							}
+							map[row1][col] = 0;
+						}
 						break;
 					}
 				}
 			}
 		}
 	}
+	//判断是否有可以消除的块
+	//消除最前面的
+
 }
 
 void GameScene::moveDown()
 {
-	
+	//向下移动所有的块
+	for (int col = 0;col<GAME_COLS; col++)
+	{
+		for (int row = 0;row<GAME_ROWS;row++)
+		{
+			if (map[row][col]>0)
+			{
+				for (int row1 =row;row1>0;row1--)//判断这一块下面所有
+				{
+					if(map[row1-1][col]==0)
+					{
+						//逻辑砖块
+						map[row1-1][col] = map[row1][col];
+						map[row1][col] = 0;
+
+						//实际砖块，减一得下标
+						m_allTile.at(  map[row1-1][col]  - 1)->moveTo(row1-1,col);
+					}
+					else
+					{
+						//判断是否可以消除
+						int numObj = m_allTile.at(map[row1-1][col]-1)->m_number;
+						int numNow = m_allTile.at(map[row1][col]-1)->m_number;
+						if (numObj==numNow)
+						{
+
+							m_allTile.at(map[row1-1][col] - 1)->doubleNumber();
+							m_allTile.at(map[row1][col]-1)->removeFromParent();
+							int index = map[row1][col];
+							m_allTile.erase(map[row1][col]-1);
+
+							//块数减一，重新布局map[row1][col]所代表数字
+
+							for (int r = 0; r < GAME_ROWS; r++)
+							{
+								for (int c = 0; c < GAME_COLS; c++)
+								{
+									if (map[r][c]>index)
+									{
+										map[r][c]--;
+									}
+								}
+							}
+							map[row1][col] = 0;
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+
 }
 
 void GameScene::moveLeft()
 {
+	//向左移动所有的块
+	for (int row = 0;row<GAME_ROWS; row++)
+	{
+		for (int col = 0;col<GAME_COLS;col++)
+		{
+			if (map[row][col]>0)//如果某一块有数字
+			{
+				for (int col1 =col;col1>0;col1--)//判断这一块左面所有
+				{
+					if(map[row][col1-1]==0)
+					{
+						//逻辑砖块
+						map[row][col1-1] = map[row][col1];
+						map[row][col1] = 0;
+
+						//实际砖块，减一得下标
+						m_allTile.at(  map[row][col1-1]  - 1)->moveTo(row,col1-1);
+					}
+					else
+					{
+						//判断是否可以消除
+						int numObj = m_allTile.at(map[row][col1-1]-1)->m_number;
+						int numNow = m_allTile.at(map[row][col1]-1)->m_number;
+						if (numObj==numNow)
+						{
+
+							m_allTile.at(map[row][col1-1] - 1)->doubleNumber();
+							m_allTile.at(map[row][col1]-1)->removeFromParent();
+							int index = map[row][col1];
+							m_allTile.erase(map[row][col1]-1);
+
+							//块数减一，重新布局map[row1][col]所代表数字
+
+							for (int r = 0; r < GAME_ROWS; r++)
+							{
+								for (int c = 0; c < GAME_COLS; c++)
+								{
+									if (map[r][c]>index)
+									{
+										map[r][c]--;
+									}
+								}
+							}
+							map[row][col1] = 0;
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
 
 }
 
 void GameScene::moveRight()
 {
+	//向右移动所有的块
+	for (int row = 0;row<GAME_ROWS; row++)
+	{
+		for (int col = GAME_COLS-1;col>=0;col--)
+		{
+			if (map[row][col]>0)//如果某一块有数字
+			{
+				for (int col1 =col;col1<GAME_COLS-1;col1++)//判断这一块右面所有
+				{
+					if(map[row][col1+1]==0)
+					{
+						//逻辑砖块
+						map[row][col1+1] = map[row][col1];
+						map[row][col1] = 0;
+
+						//实际砖块，减一得下标
+						m_allTile.at(  map[row][col1+1]  - 1)->moveTo(row,col1+1);
+					}
+					else
+					{
+						//判断是否可以消除
+						int numObj = m_allTile.at(map[row][col1+1]-1)->m_number;
+						int numNow = m_allTile.at(map[row][col1]-1)->m_number;
+						if (numObj==numNow)
+						{
+
+							m_allTile.at(map[row][col1+1] - 1)->doubleNumber();
+							m_allTile.at(map[row][col1]-1)->removeFromParent();
+							int index = map[row][col1];
+							m_allTile.erase(map[row][col1]-1);
+
+							//块数减一，重新布局map[row1][col]所代表数字
+
+							for (int r = 0; r < GAME_ROWS; r++)
+							{
+								for (int c = 0; c < GAME_COLS; c++)
+								{
+									if (map[r][c]>index)
+									{
+										map[r][c]--;
+									}
+								}
+							}
+							map[row][col1] = 0;
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
 
 }

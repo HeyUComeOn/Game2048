@@ -20,7 +20,7 @@ bool MovedTile::init()
 	//±³¾°²ã
 	auto bk = LayerColor::create(Color4B(255, 0, 156, 64) ,GAME_TILE_WIDTH,GAME_TILE_HEIGHT);
 	this->addChild(bk);
-
+	bk->setTag(110);
 
 	//Êý×Ö²ã
 	int n = rand()%10;
@@ -29,6 +29,7 @@ bool MovedTile::init()
 	label->setColor(Color3B::BLACK);
 	label->setPosition(GAME_TILE_WIDTH/2,GAME_TILE_HEIGHT/2);
 	bk->addChild(label);
+	label->setTag(10);
 	return true;
 }
 
@@ -43,4 +44,12 @@ void MovedTile::moveTo(int r, int c)
 	m_col = c;
 	this->setPosition(GAME_TILE_WIDTH*m_col + GAME_TILE_GAP*(m_col+1), 
 		GAME_TILE_HEIGHT*m_row + GAME_TILE_GAP*(m_row+1));
+}
+
+void MovedTile::doubleNumber()
+{
+	this->m_number = this->m_number*2;
+	auto bk = static_cast<LayerColor*>(this->getChildByTag(110));
+	auto label = static_cast<Label*>(bk->getChildByTag(10));
+	label->setString(__String::createWithFormat("%d",m_number)->getCString());
 }
