@@ -53,6 +53,15 @@ bool GameScene::init()
 	colorBack->setPosition(GAME_SCREEN_WIDTH/2 - backWidth/2,GAME_SCREEN_HEIGHT/2-backHeight/2) ;
 	addChild(colorBack);
 
+	//初始化分数
+	m_score = 0;
+	auto labelScore = Label::createWithBMFont("fonts/futura-48.fnt","score:0");
+	labelScore->setPosition(Vec2(GAME_SCREEN_WIDTH/2,
+		GAME_SCREEN_HEIGHT-labelGame->getContentSize().height));
+	this->addChild(labelScore);
+	labelScore->setScale(0.8f);
+	labelScore->setTag(120);
+
 	//初始化网格的每一个块
 	for (int row = 0; row<GAME_ROWS; row++)
 	{
@@ -117,7 +126,6 @@ bool GameScene::init()
 		}
 	};
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(event,this);
-	//分数
 
 	return true;
 }
@@ -152,7 +160,10 @@ void GameScene::moveAllTile(E_MOVE_DIRECT direct)
 	{
 		SimpleAudioEngine::getInstance()->playEffect("musics/move.wav");
 	}
-	
+	//分数变化
+	auto labelScore = (Label *)this->getChildByTag(120);
+	labelScore->setString(__String::createWithFormat("score:%d",m_score)->getCString());
+
 	//判定输赢
 	//产生新块
 	newMoveTile();
@@ -229,7 +240,7 @@ void GameScene::moveUp()//从此看起
 						if (numObj==numNow)
 						{
 							m_sound_clear = true;
-
+							m_score += numObj*2;
 							m_allTile.at(map[row1+1][col] - 1)->doubleNumber();
 							m_allTile.at(map[row1][col]-1)->removeFromParent();
 							int index = map[row1][col];
@@ -289,7 +300,7 @@ void GameScene::moveDown()
 						if (numObj==numNow)
 						{
 							m_sound_clear = true;
-
+							m_score += numObj*2;
 							m_allTile.at(map[row1-1][col] - 1)->doubleNumber();
 							m_allTile.at(map[row1][col]-1)->removeFromParent();
 							int index = map[row1][col];
@@ -347,7 +358,7 @@ void GameScene::moveLeft()
 						if (numObj==numNow)
 						{
 							m_sound_clear = true;
-
+							m_score += numObj*2;
 							m_allTile.at(map[row][col1-1] - 1)->doubleNumber();
 							m_allTile.at(map[row][col1]-1)->removeFromParent();
 							int index = map[row][col1];
@@ -405,7 +416,7 @@ void GameScene::moveRight()
 						if (numObj==numNow)
 						{
 							m_sound_clear = true;
-
+							m_score += numObj*2;
 							m_allTile.at(map[row][col1+1] - 1)->doubleNumber();
 							m_allTile.at(map[row][col1]-1)->removeFromParent();
 							int index = map[row][col1];

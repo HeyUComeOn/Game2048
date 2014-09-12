@@ -76,9 +76,10 @@ void MovedTile::doubleNumber()
 		);
 
 	switch (this->m_number) {
+	/*
 	case 2:
 		bk->setColor(Color3B(230,220,210));
-
+		bk->setColor(Color3B(255,255,255));*///用不到
 	case 4:
 		bk->setColor(Color3B(230,210,190));
 		break;
@@ -99,6 +100,7 @@ void MovedTile::doubleNumber()
 		label->setColor(Color3B(255,255,255));
 		break;
 	case 128:
+		label->setScale(0.8f);
 		bk->setColor(Color3B(230,190,60));
 		label->setColor(Color3B(255,255,255));
 		break;
@@ -111,8 +113,9 @@ void MovedTile::doubleNumber()
 		label->setColor(Color3B(255,255,255));
 		break;
 	case 1024:
+		label->setScale(0.7);
 	case 2048:
-		label->setScale(0.5);
+		/*label->setScale(0.7);*///在1024已经放缩，再放缩就不合适了
 		bk->setColor(Color3B(210,180,30));
 		label->setColor(Color3B(255,255,255));
 	}

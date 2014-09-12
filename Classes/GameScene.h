@@ -31,6 +31,7 @@ private:
 	bool m_startMove;//是否开始移动
 	int m_x,m_y;//触摸开始的点
 	bool m_sound_clear;
+	int m_score;//分数
 };
 
 
