@@ -16,6 +16,8 @@ public:
 
 	virtual bool init();  
 
+	void soundCallback(cocos2d::Ref* pSender);
+
 	E_MOVE_DIRECT m_direct;//移动方向
 	int map[GAME_ROWS][GAME_COLS];
 	cocos2d::Vector<MovedTile *> m_allTile;//保存所有块

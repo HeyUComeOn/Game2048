@@ -71,5 +71,5 @@ void Splash::JumpToGame(float delta)
 	SimpleAudioEngine::getInstance()->preloadBackgroundMusic("musics/lose.wav");
 #endif
 	
-	Director::getInstance()->replaceScene(TransitionProgressRadialCW::create(0.5f,GameScene::createScene()));
+	Director::getInstance()->replaceScene(TransitionProgressRadialCW::create(3.0f,GameScene::createScene()));
 }

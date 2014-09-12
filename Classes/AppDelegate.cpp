@@ -21,6 +21,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 		glview->setFrameSize(GAME_SCREEN_WIDTH,GAME_SCREEN_HEIGHT);
     }
 
+	glview->setDesignResolutionSize(320,480,ResolutionPolicy::EXACT_FIT);
     // turn on display FPS
     director->setDisplayStats(true);
 

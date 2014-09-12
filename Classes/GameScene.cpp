@@ -47,6 +47,16 @@ bool GameScene::init()
 	labelGame->setScale(0.5f);
 	addChild(labelGame);
 
+	//显示游戏声音控制菜单
+	auto item1 = MenuItemImage::create("sound.png","sound.png");
+	auto item2 = MenuItemImage::create("soundOff.png","soundOff.png");
+	auto mntoggle = MenuItemToggle::createWithCallback(CC_CALLBACK_1(GameScene::soundCallback,this),item1,item2,NULL);
+	mntoggle->setPosition(GAME_SCREEN_WIDTH-mntoggle->getContentSize().width/2 ,
+		GAME_SCREEN_HEIGHT-mntoggle->getContentSize().height/2);
+	auto mn = Menu::create(mntoggle,NULL);
+	mn->setPosition(Point::ZERO);
+	this->addChild(mn,1);
+
 	//创建背景网格
 	auto backWidth = GAME_TILE_WIDTH*GAME_COLS+GAME_TILE_GAP*(GAME_COLS+1);
 	auto backHeight = GAME_TILE_HEIGHT*GAME_ROWS+GAME_TILE_GAP*(GAME_ROWS+1);
@@ -130,6 +140,25 @@ bool GameScene::init()
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(event,this);
 
 	return true;
+}
+
+void GameScene::soundCallback(Ref* pSender)
+{
+	auto item = static_cast<MenuItemToggle*>(pSender);
+	switch (item->getSelectedIndex())
+	{
+	case 0:
+		SimpleAudioEngine::getInstance()->resumeAllEffects();
+		UserDefault::getInstance()->setBoolForKey("loseMusicOff",false);
+		break;
+	case 1:
+		SimpleAudioEngine::getInstance()->pauseAllEffects();
+		UserDefault::getInstance()->setBoolForKey("loseMusicOff",true);
+		break;
+	default:
+		break;
+	}
+
 }
 
 void GameScene::moveAllTile(E_MOVE_DIRECT direct)

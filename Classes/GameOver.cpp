@@ -37,12 +37,18 @@ bool GameOver::init()
 	{
 		return false;
 	}
+
+	//播放音乐
+	if (!UserDefault::getInstance()->getBoolForKey("loseMusicOff"))
+	{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	SimpleAudioEngine::getInstance()->playBackgroundMusic("musics/lose.ogg");
+		SimpleAudioEngine::getInstance()->playBackgroundMusic("musics/lose.ogg");
 #endif
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	SimpleAudioEngine::getInstance()->playBackgroundMusic("musics/lose.wav");
+		SimpleAudioEngine::getInstance()->playBackgroundMusic("musics/lose.wav");
 #endif
+	}
+
 	//显示游戏结束
 	auto labelOver = Label::createWithBMFont("fonts/futura-48.fnt","Game Over");
 	labelOver->setPosition(GAME_SCREEN_WIDTH/2,GAME_SCREEN_HEIGHT/2);
@@ -50,7 +56,7 @@ bool GameOver::init()
 	addChild(labelOver);
 
 	//重新开始
-	auto labelRe = Label::createWithBMFont("fonts/futura-48.fnt","Restart Game");
+	auto labelRe = Label::createWithBMFont("fonts/futura-48.fnt","Restart");
 	
 	auto labelItem = MenuItemLabel::create(labelRe,
 		CC_CALLBACK_1(GameOver::menuCallBack,this));
