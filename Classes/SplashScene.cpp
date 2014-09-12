@@ -1,8 +1,9 @@
 #include "SplashScene.h"
 #include "GameDefine.h"
 #include "GameScene.h"
+#include "SimpleAudioEngine.h"
 USING_NS_CC;
-
+using namespace CocosDenshion;
 Splash::Splash()
 {
 }
@@ -58,5 +59,9 @@ bool Splash::init()
 
 void Splash::JumpToGame(float delta)
 {
+	//¼ÓÔØÒôÐ§
+	SimpleAudioEngine::getInstance()->preloadEffect("musics/move.wav");
+	SimpleAudioEngine::getInstance()->preloadEffect("musics/clear.wav");
+
 	Director::getInstance()->replaceScene(TransitionProgressRadialCW::create(0.5f,GameScene::createScene()));
 }

@@ -2,6 +2,8 @@
 #include "GameDefine.h"
 #include "MovedTile.h"
 #include "Dlog.h"
+#include "SimpleAudioEngine.h"
+using namespace CocosDenshion;
 USING_NS_CC;
 
 GameScene::GameScene()
@@ -122,6 +124,7 @@ bool GameScene::init()
 
 void GameScene::moveAllTile(E_MOVE_DIRECT direct)
 {
+	m_sound_clear = false;
 	//移动所有块,消除
 	switch (direct)
 	{
@@ -141,6 +144,15 @@ void GameScene::moveAllTile(E_MOVE_DIRECT direct)
 		break;
 	}
 	//播放音乐
+	if (m_sound_clear)
+	{
+		SimpleAudioEngine::getInstance()->playEffect("musics/clear.wav");
+	}
+	else
+	{
+		SimpleAudioEngine::getInstance()->playEffect("musics/move.wav");
+	}
+	
 	//判定输赢
 	//产生新块
 	newMoveTile();
@@ -180,7 +192,7 @@ void GameScene::newMoveTile()
 			break;
 		}
 	}
-	tile->moveTo(row, col);
+	tile->showAt(row, col);
 	colorBack->addChild(tile);
 	m_allTile.pushBack(tile);
 	//此为核心数据结构，表示有m_allTile.getIndex(tile)+1个可移动得块
@@ -210,12 +222,14 @@ void GameScene::moveUp()//从此看起
 					}
 					else
 					{
+						
 						//判断是否可以消除
 						int numObj = m_allTile.at(map[row1+1][col]-1)->m_number;
 						int numNow = m_allTile.at(map[row1][col]-1)->m_number;
 						if (numObj==numNow)
 						{
-							
+							m_sound_clear = true;
+
 							m_allTile.at(map[row1+1][col] - 1)->doubleNumber();
 							m_allTile.at(map[row1][col]-1)->removeFromParent();
 							int index = map[row1][col];
@@ -268,11 +282,13 @@ void GameScene::moveDown()
 					}
 					else
 					{
+						
 						//判断是否可以消除
 						int numObj = m_allTile.at(map[row1-1][col]-1)->m_number;
 						int numNow = m_allTile.at(map[row1][col]-1)->m_number;
 						if (numObj==numNow)
 						{
+							m_sound_clear = true;
 
 							m_allTile.at(map[row1-1][col] - 1)->doubleNumber();
 							m_allTile.at(map[row1][col]-1)->removeFromParent();
@@ -324,11 +340,13 @@ void GameScene::moveLeft()
 					}
 					else
 					{
+						
 						//判断是否可以消除
 						int numObj = m_allTile.at(map[row][col1-1]-1)->m_number;
 						int numNow = m_allTile.at(map[row][col1]-1)->m_number;
 						if (numObj==numNow)
 						{
+							m_sound_clear = true;
 
 							m_allTile.at(map[row][col1-1] - 1)->doubleNumber();
 							m_allTile.at(map[row][col1]-1)->removeFromParent();
@@ -380,11 +398,13 @@ void GameScene::moveRight()
 					}
 					else
 					{
+						
 						//判断是否可以消除
 						int numObj = m_allTile.at(map[row][col1+1]-1)->m_number;
 						int numNow = m_allTile.at(map[row][col1]-1)->m_number;
 						if (numObj==numNow)
 						{
+							m_sound_clear = true;
 
 							m_allTile.at(map[row][col1+1] - 1)->doubleNumber();
 							m_allTile.at(map[row][col1]-1)->removeFromParent();
