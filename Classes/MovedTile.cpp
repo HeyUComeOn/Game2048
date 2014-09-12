@@ -113,7 +113,7 @@ void MovedTile::doubleNumber()
 		label->setColor(Color3B(255,255,255));
 		break;
 	case 1024:
-		label->setScale(0.7);
+		label->setScale(0.7f);
 	case 2048:
 		/*label->setScale(0.7);*///在1024已经放缩，再放缩就不合适了
 		bk->setColor(Color3B(210,180,30));

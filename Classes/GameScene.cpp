@@ -3,6 +3,7 @@
 #include "MovedTile.h"
 #include "Dlog.h"
 #include "SimpleAudioEngine.h"
+#include "GameOver.h"
 using namespace CocosDenshion;
 USING_NS_CC;
 
@@ -39,6 +40,7 @@ bool GameScene::init()
 		return false;
 	}
 
+	//显示游戏名称
 	auto labelGame = Label::createWithBMFont("fonts/futura-48.fnt","2048");
 	labelGame->setPosition(labelGame->getContentSize().width/2 ,
 		GAME_SCREEN_HEIGHT-labelGame->getContentSize().height/2);
@@ -173,9 +175,9 @@ void GameScene::newMoveTile()
 {
 	auto tile = MovedTile::create();
 	int freeCount = 16-m_allTile.size();
-	if(freeCount==0)//没有空白区域
+
+	if (freeCount==0)
 	{
-		Dlog::showLog("no Space");
 		return;
 	}
 	int num = rand()%freeCount;
@@ -209,6 +211,61 @@ void GameScene::newMoveTile()
 	//此为核心数据结构，表示有m_allTile.getIndex(tile)+1个可移动得块
 	map[row][col] = m_allTile.getIndex(tile)+1;//表示有m_allTile.getIndex(tile)个可移动得块
 	Dlog::showLog("%d,%d",row,col);
+
+	if(freeCount==1)//判断最后一个块
+	{
+		//判断游戏输赢
+		//上下左右是否还能移动
+		for (int r = 0;r<GAME_ROWS;r++)
+		{
+			for (int c = 0;c<GAME_COLS;c++)
+			{
+				//第r行第c列的数值
+				int num = m_allTile.at(map[r][c]-1)->m_number;
+				int objNum = 0;
+				//上
+				if(r+1<GAME_ROWS)
+				{
+					objNum = m_allTile.at(map[r+1][c]-1)->m_number;
+					if (num == objNum)
+					{
+						return;//不再产生新块，请继续移动
+					}
+				}
+				//下
+				if(r-1>=0)
+				{
+					objNum = m_allTile.at(map[r-1][c]-1)->m_number;
+					if (num == objNum)
+					{
+						return;//不再产生新块，请继续移动
+					}
+				}
+				//左
+				if(c-1>=0)
+				{
+					objNum = m_allTile.at(map[r][c-1]-1)->m_number;
+					if (num == objNum)
+					{
+						return;//不再产生新块，请继续移动
+					}
+				}
+				//右
+				if(c+1<GAME_COLS)
+				{
+					objNum = m_allTile.at(map[r][c+1]-1)->m_number;
+					if (num == objNum)
+					{
+						return;//不再产生新块，请继续移动
+					}
+				}
+			}
+		}
+		//跳转场景
+		auto sc = GameOver::createScene();
+		Director::getInstance()->replaceScene(TransitionCrossFade::create(0.5f,sc));
+		return;
+	}
 }
 
 void GameScene::moveUp()//从此看起

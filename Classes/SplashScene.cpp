@@ -62,6 +62,14 @@ void Splash::JumpToGame(float delta)
 	//加载音效
 	SimpleAudioEngine::getInstance()->preloadEffect("musics/move.wav");
 	SimpleAudioEngine::getInstance()->preloadEffect("musics/clear.wav");
-
+	
+	//加载结束音乐
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic("musics/lose.ogg");
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic("musics/lose.wav");
+#endif
+	
 	Director::getInstance()->replaceScene(TransitionProgressRadialCW::create(0.5f,GameScene::createScene()));
 }
