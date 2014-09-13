@@ -24,7 +24,7 @@ bool MovedTile::init()
 
 	//数字层
 	int n = rand()%10;
-	this->m_number = n>0 ? 2:4; //n为0-9，n为0的情况占10%，4出现的概率为10%
+	this->m_number = n>0 ? 512:4; //n为0-9，n为0的情况占10%，4出现的概率为10%
 	auto label = Label::createWithTTF(__String::createWithFormat("%d",m_number)->getCString(),"fonts/arial.ttf",40);
 	switch (this->m_number) {
 	case 2:
@@ -114,9 +114,14 @@ void MovedTile::doubleNumber()
 		break;
 	case 1024:
 		label->setScale(0.7f);
+		break;
 	case 2048:
 		/*label->setScale(0.7);*///在1024已经放缩，再放缩就不合适了
 		bk->setColor(Color3B(210,180,30));
 		label->setColor(Color3B(255,255,255));
+		UserDefault::getInstance()->setBoolForKey("On2048",true);
+		break;
+	default:
+		break;
 	}
 }

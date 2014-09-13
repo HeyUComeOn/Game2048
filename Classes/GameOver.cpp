@@ -70,5 +70,5 @@ bool GameOver::init()
 void GameOver::menuCallBack(cocos2d::Ref* ref)
 {
 	auto sc = GameScene::createScene();
-	Director::getInstance()->replaceScene(TransitionCrossFade::create(1.5f,sc));
+	Director::getInstance()->replaceScene(TransitionCrossFade::create(1.5f, sc));
 }

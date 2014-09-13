@@ -17,7 +17,7 @@ public:
 
 	CREATE_FUNC(Splash);
 private:
-
+	
 };
 
 #endif // SplashScene_h__

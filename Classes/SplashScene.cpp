@@ -59,6 +59,20 @@ bool Splash::init()
 
 void Splash::JumpToGame(float delta)
 {
+	//todo
+	//加载plist,动画
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("grossini-aliases.plist");
+	auto animation = Animation::create();
+	for(int i=1;i!=15;i++)
+	{
+		auto s=__String::createWithFormat("grossini_dance_%02d.png",i);
+		auto spf=SpriteFrameCache::getInstance()->getSpriteFrameByName(s->getCString());
+		animation->addSpriteFrame(spf);
+	}
+	animation->setDelayPerUnit(0.15f);
+	animation->setLoops(-1);
+	AnimationCache::getInstance()->addAnimation(animation,"Dance");
+
 	//加载音效
 	SimpleAudioEngine::getInstance()->preloadEffect("musics/move.wav");
 	SimpleAudioEngine::getInstance()->preloadEffect("musics/clear.wav");
@@ -71,5 +85,13 @@ void Splash::JumpToGame(float delta)
 	SimpleAudioEngine::getInstance()->preloadBackgroundMusic("musics/lose.wav");
 #endif
 	
+	//加载胜利音乐
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic("musics/win.ogg");
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic("musics/win.wav");
+#endif
+
 	Director::getInstance()->replaceScene(TransitionProgressRadialCW::create(3.0f,GameScene::createScene()));
 }

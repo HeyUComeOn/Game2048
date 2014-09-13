@@ -4,6 +4,7 @@
 #include "Dlog.h"
 #include "SimpleAudioEngine.h"
 #include "GameOver.h"
+#include "GameWin.h"
 using namespace CocosDenshion;
 USING_NS_CC;
 
@@ -59,6 +60,11 @@ bool GameScene::init()
 	auto mn = Menu::create(mntoggle,NULL);
 	mn->setPosition(Point::ZERO);
 	this->addChild(mn,1);
+	//起始喇叭开启
+	UserDefault::getInstance()->setBoolForKey("loseMusicOff",false);
+
+	//加载判断是否到2048的数据
+	UserDefault::getInstance()->setBoolForKey("On2048",false);
 
 	//创建背景网格
 	auto backWidth = GAME_TILE_WIDTH*GAME_COLS+GAME_TILE_GAP*(GAME_COLS+1);
@@ -198,7 +204,15 @@ void GameScene::moveAllTile(E_MOVE_DIRECT direct)
 	auto labelScore = (Label *)this->getChildByTag(120);
 	labelScore->setString(__String::createWithFormat("score:%d",m_score)->getCString());
 
-	//判定输赢
+	//判定是否赢了
+	if(UserDefault::getInstance()->getBoolForKey("On2048"))
+	{
+		//todo
+		auto sc = GameWin::createScene();
+		Director::getInstance()->replaceScene(TransitionSlideInB::create(3.0f,sc));
+		UserDefault::getInstance()->setIntegerForKey("Score",m_score);
+
+	}
 	//产生新块
 	newMoveTile();
 }
