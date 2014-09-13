@@ -13,19 +13,22 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
+	
+}
+
+void GameScene::onExit()
+{
+	Layer::onExit();
+	Director::getInstance()->getEventDispatcher()->removeEventListener(static_cast<EventListener*>(m_Event));
 }
 
 Scene* GameScene::createScene()
 {
-
 	auto scene = Scene::create();
-
 
 	auto layer = GameScene::create();
 
-
 	scene->addChild(layer);
-
 
 	return scene;
 }
@@ -99,14 +102,14 @@ bool GameScene::init()
 	newMoveTile();
 	
 	//触摸的处理
-	auto event = EventListenerTouchOneByOne::create();
-	event->onTouchBegan = [&](Touch*tou,Event* event){
+	m_Event = EventListenerTouchOneByOne::create();
+	m_Event->onTouchBegan = [&](Touch*tou,Event* event){
 		m_x = tou->getLocation().x;
 		m_y = tou->getLocation().y;
 		m_startMove = true;
 		return true;
 	};
-	event->onTouchMoved = [&](Touch*tou,Event* event){
+	m_Event->onTouchMoved = [&](Touch*tou,Event* event){
 		int x = tou->getLocation().x;
 		int y = tou->getLocation().y;
 		if(m_startMove && (abs(m_x - x)>10||abs(m_y - y)>10))
@@ -137,7 +140,7 @@ bool GameScene::init()
 			moveAllTile(direct);//所有的元素块
 		}
 	};
-	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(event,this);
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(m_Event, this);
 
 	return true;
 }

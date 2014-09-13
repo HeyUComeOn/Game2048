@@ -18,7 +18,7 @@ bool MovedTile::init()
 		return false;
 	}
 	//±³¾°²ã
-	auto bk = LayerColor::create(Color4B(255, 0, 156, 64) ,GAME_TILE_WIDTH,GAME_TILE_HEIGHT);
+	auto bk = LayerColor::create(Color4B(255, 0, 156, 200) ,GAME_TILE_WIDTH,GAME_TILE_HEIGHT);
 	this->addChild(bk);
 	bk->setTag(110);
 
@@ -28,7 +28,7 @@ bool MovedTile::init()
 	auto label = Label::createWithTTF(__String::createWithFormat("%d",m_number)->getCString(),"fonts/arial.ttf",40);
 	switch (this->m_number) {
 	case 2:
-		bk->setColor(Color3B(230,220,210));
+		bk->setColor(Color3B(255, 0, 156));
 	case 4:
 		bk->setColor(Color3B(230,210,190));
 		break;

@@ -15,7 +15,7 @@ public:
 	static cocos2d::Scene* createScene();
 
 	virtual bool init();  
-
+	virtual void onExit();
 	void soundCallback(cocos2d::Ref* pSender);
 
 	E_MOVE_DIRECT m_direct;//移动方向
@@ -30,10 +30,12 @@ public:
 	CREATE_FUNC(GameScene);
 private:
 	cocos2d::LayerColor* colorBack;
+	cocos2d::EventListenerTouchOneByOne* m_Event;
 	bool m_startMove;//是否开始移动
 	int m_x,m_y;//触摸开始的点
 	bool m_sound_clear;
 	int m_score;//分数
+
 };
 
 
