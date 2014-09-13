@@ -24,7 +24,7 @@ bool MovedTile::init()
 
 	//数字层
 	int n = rand()%10;
-	this->m_number = n>0 ? 512:4; //n为0-9，n为0的情况占10%，4出现的概率为10%
+	this->m_number = n>0 ? 2:4; //n为0-9，n为0的情况占10%，4出现的概率为10%
 	auto label = Label::createWithTTF(__String::createWithFormat("%d",m_number)->getCString(),"fonts/arial.ttf",40);
 	switch (this->m_number) {
 	case 2:

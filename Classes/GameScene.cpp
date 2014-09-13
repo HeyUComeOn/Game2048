@@ -1,6 +1,6 @@
 #include "GameScene.h"
 #include "GameDefine.h"
-#include "MovedTile.h"
+
 #include "Dlog.h"
 #include "SimpleAudioEngine.h"
 #include "GameOver.h"
@@ -107,6 +107,18 @@ bool GameScene::init()
 	//初始化数字块
 	newMoveTile();
 	
+	//添加反悔按钮
+	auto backSpace = LayerColor::create(Color4B(70,70,70,255),46,32);
+	backSpace->setPosition(GAME_SCREEN_WIDTH/2-backWidth/2 ,
+		GAME_SCREEN_HEIGHT/2+backHeight/2);
+	addChild(backSpace);
+	auto itemBack = MenuItemImage::create("btn-back-0.png", "btn-back-1.png", 
+		CC_CALLBACK_1(GameScene::backCallback,this));
+	auto menuBack = Menu::create(itemBack,nullptr);
+	menuBack->setPosition(Point::ZERO);
+	itemBack->setPosition(backSpace->getContentSize().width/2,backSpace->getContentSize().height/2);
+	backSpace->addChild(menuBack);
+
 	//触摸的处理
 	m_Event = EventListenerTouchOneByOne::create();
 	m_Event->onTouchBegan = [&](Touch*tou,Event* event){
@@ -255,7 +267,7 @@ void GameScene::newMoveTile()
 	colorBack->addChild(tile);
 	m_allTile.pushBack(tile);
 	//此为核心数据结构，表示有m_allTile.getIndex(tile)+1个可移动得块
-	map[row][col] = m_allTile.getIndex(tile)+1;//表示有m_allTile.getIndex(tile)个可移动得块
+	map[row][col] = m_allTile.getIndex(tile)+1;//[row][col]为砖块的排名
 	Dlog::showLog("%d,%d",row,col);
 
 	if(freeCount==1)//判断最后一个块
@@ -317,6 +329,7 @@ void GameScene::newMoveTile()
 void GameScene::moveUp()//从此看起
 {
 	//向上移动所有的块
+	m_LastAllTile = m_allTile;
 	for (int col = 0;col<GAME_COLS; col++)
 	{
 		for (int row = GAME_ROWS-1;row>=0;row--)//row>0改为row>=0
@@ -327,7 +340,7 @@ void GameScene::moveUp()//从此看起
 				{
 					if(map[row1+1][col]==0)
 					{
-						//逻辑砖块
+						//砖块排名
 						map[row1+1][col] = map[row1][col];
 						map[row1][col] = 0;
 
@@ -377,6 +390,7 @@ void GameScene::moveUp()//从此看起
 void GameScene::moveDown()
 {
 	//向下移动所有的块
+	m_LastAllTile = m_allTile;
 	for (int col = 0;col<GAME_COLS; col++)
 	{
 		for (int row = 0;row<GAME_ROWS;row++)
@@ -387,7 +401,7 @@ void GameScene::moveDown()
 				{
 					if(map[row1-1][col]==0)
 					{
-						//逻辑砖块
+						//砖块排名
 						map[row1-1][col] = map[row1][col];
 						map[row1][col] = 0;
 
@@ -435,6 +449,7 @@ void GameScene::moveDown()
 void GameScene::moveLeft()
 {
 	//向左移动所有的块
+	m_LastAllTile = m_allTile;
 	for (int row = 0;row<GAME_ROWS; row++)
 	{
 		for (int col = 0;col<GAME_COLS;col++)
@@ -445,7 +460,7 @@ void GameScene::moveLeft()
 				{
 					if(map[row][col1-1]==0)
 					{
-						//逻辑砖块
+						//砖块排名
 						map[row][col1-1] = map[row][col1];
 						map[row][col1] = 0;
 
@@ -493,6 +508,7 @@ void GameScene::moveLeft()
 void GameScene::moveRight()
 {
 	//向右移动所有的块
+	m_LastAllTile = m_allTile;
 	for (int row = 0;row<GAME_ROWS; row++)
 	{
 		for (int col = GAME_COLS-1;col>=0;col--)
@@ -503,7 +519,7 @@ void GameScene::moveRight()
 				{
 					if(map[row][col1+1]==0)
 					{
-						//逻辑砖块
+						//砖块排名
 						map[row][col1+1] = map[row][col1];
 						map[row][col1] = 0;
 
@@ -546,4 +562,16 @@ void GameScene::moveRight()
 		}
 	}
 
+}
+
+void GameScene::backCallback(cocos2d::Ref* pSender)
+{
+	/*
+			1.现在来看只好先记住各个砖块的排名，即map[row][col]
+			2.m_allTile = m_LastAllTile
+			3.最后利用m_number来重新铺设真实砖块
+			
+	map[m_allTile.m_row[m_allTile.m_col] = 0;
+
+	m_allTile = m_LastAllTile;*/
 }
