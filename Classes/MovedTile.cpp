@@ -22,6 +22,7 @@ bool MovedTile::init()
 	this->addChild(bk);
 	bk->setTag(110);
 
+/*
 	//数字层
 	int n = rand()%10;
 	this->m_number = n>0 ? 2:4; //n为0-9，n为0的情况占10%，4出现的概率为10%
@@ -36,8 +37,28 @@ bool MovedTile::init()
 	label->setColor(Color3B::BLACK);
 	label->setPosition(GAME_TILE_WIDTH/2,GAME_TILE_HEIGHT/2);
 	bk->addChild(label);
-	label->setTag(10);
+	label->setTag(10);*/
 	return true;
+}
+
+void MovedTile::firstInit()
+{
+	//数字层
+	int n = rand()%10;
+	this->m_number = n>0 ? 2:4; //n为0-9，n为0的情况占10%，4出现的概率为10%
+	auto label = Label::createWithTTF(__String::createWithFormat("%d",m_number)->getCString(),"fonts/arial.ttf",40);
+	auto bk = static_cast<LayerColor*>(this->getChildByTag(110));
+	switch (this->m_number) {
+	case 2:
+		bk->setColor(Color3B(255, 0, 156));
+	case 4:
+		bk->setColor(Color3B(230,210,190));
+		break;
+	}
+	label->setColor(Color3B::BLACK);
+	label->setPosition(GAME_TILE_WIDTH/2,GAME_TILE_HEIGHT/2);
+	bk->addChild(label);
+	label->setTag(10);
 }
 
 void MovedTile::showAt(int r, int c)

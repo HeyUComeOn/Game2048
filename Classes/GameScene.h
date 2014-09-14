@@ -35,7 +35,8 @@ private:
 	int m_x,m_y;//触摸开始的点
 	bool m_sound_clear;
 	int m_score;//分数
-	int map[GAME_ROWS][GAME_COLS];//各个砖块排名
+	int map[GAME_ROWS][GAME_COLS];//各个位置砖块排名
+	int LastMap[GAME_ROWS][GAME_COLS];//上个位置各砖块排名
 	cocos2d::Vector<MovedTile *> m_allTile;//保存所有块
 	cocos2d::Vector<MovedTile *> m_LastAllTile;//保存的上一次的块，用于回溯
 };

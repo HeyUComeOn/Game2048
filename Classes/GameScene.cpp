@@ -14,7 +14,7 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-	
+
 }
 
 void GameScene::onExit()
@@ -91,12 +91,12 @@ bool GameScene::init()
 			auto layerTile = LayerColor::create(Color4B(70,70,70,255),GAME_TILE_WIDTH,GAME_TILE_HEIGHT);
 
 			layerTile->setPosition(GAME_TILE_WIDTH*col+GAME_TILE_GAP*(col+1), GAME_TILE_HEIGHT*row+GAME_TILE_GAP*(row+1));
-			
+
 			colorBack->addChild(layerTile);
 		}
-		
 	}
-	//初始化"逻辑的网格"数组
+
+	//初始化各位置块的排名
 	for(int i= 0;i<GAME_ROWS;i++)
 	{
 		for(int j = 0;j<GAME_COLS;j++)
@@ -104,9 +104,10 @@ bool GameScene::init()
 			map[i][j] = 0;//空白
 		}
 	}
+
 	//初始化数字块
 	newMoveTile();
-	
+
 	//添加反悔按钮
 	auto backSpace = LayerColor::create(Color4B(70,70,70,255),46,32);
 	backSpace->setPosition(GAME_SCREEN_WIDTH/2-backWidth/2 ,
@@ -232,6 +233,7 @@ void GameScene::moveAllTile(E_MOVE_DIRECT direct)
 void GameScene::newMoveTile()
 {
 	auto tile = MovedTile::create();
+	tile->firstInit();
 	int freeCount = 16-m_allTile.size();
 
 	if (freeCount==0)
@@ -266,8 +268,11 @@ void GameScene::newMoveTile()
 	tile->showAt(row, col);
 	colorBack->addChild(tile);
 	m_allTile.pushBack(tile);
+	//m_LastAllTile = m_allTile;
 	//此为核心数据结构，表示有m_allTile.getIndex(tile)+1个可移动得块
 	map[row][col] = m_allTile.getIndex(tile)+1;//[row][col]为砖块的排名
+	//LastMap[row][col] = map[row][col];
+	tile->setTag(map[row][col]);
 	Dlog::showLog("%d,%d",row,col);
 
 	if(freeCount==1)//判断最后一个块
@@ -328,8 +333,17 @@ void GameScene::newMoveTile()
 
 void GameScene::moveUp()//从此看起
 {
-	//向上移动所有的块
+	//先记录各砖块状态
 	m_LastAllTile = m_allTile;
+	for (int row = 0; row<GAME_ROWS; row++)
+	{
+		for (int col = 0; col<GAME_COLS; col++)
+		{
+			LastMap[row][col] = map[row][col];
+		}
+	}
+
+	//向上移动所有的块
 	for (int col = 0;col<GAME_COLS; col++)
 	{
 		for (int row = GAME_ROWS-1;row>=0;row--)//row>0改为row>=0
@@ -349,7 +363,7 @@ void GameScene::moveUp()//从此看起
 					}
 					else
 					{
-						
+
 						//判断是否可以消除
 						int numObj = m_allTile.at(map[row1+1][col]-1)->m_number;
 						int numNow = m_allTile.at(map[row1][col]-1)->m_number;
@@ -363,7 +377,7 @@ void GameScene::moveUp()//从此看起
 							m_allTile.erase(map[row1][col]-1);
 
 							//块数减一，重新布局map[row1][col]所代表数字
-							
+
 							for (int r = 0; r < GAME_ROWS; r++)
 							{
 								for (int c = 0; c < GAME_COLS; c++)
@@ -389,8 +403,17 @@ void GameScene::moveUp()//从此看起
 
 void GameScene::moveDown()
 {
-	//向下移动所有的块
+	//先记录各砖块状态
 	m_LastAllTile = m_allTile;
+	for (int row = 0; row<GAME_ROWS; row++)
+	{
+		for (int col = 0; col<GAME_COLS; col++)
+		{
+			LastMap[row][col] = map[row][col];
+		}
+	}
+
+	//向下移动所有的块
 	for (int col = 0;col<GAME_COLS; col++)
 	{
 		for (int row = 0;row<GAME_ROWS;row++)
@@ -410,7 +433,7 @@ void GameScene::moveDown()
 					}
 					else
 					{
-						
+
 						//判断是否可以消除
 						int numObj = m_allTile.at(map[row1-1][col]-1)->m_number;
 						int numNow = m_allTile.at(map[row1][col]-1)->m_number;
@@ -448,8 +471,17 @@ void GameScene::moveDown()
 
 void GameScene::moveLeft()
 {
-	//向左移动所有的块
+	//先记录各砖块状态
 	m_LastAllTile = m_allTile;
+	for (int row = 0; row<GAME_ROWS; row++)
+	{
+		for (int col = 0; col<GAME_COLS; col++)
+		{
+			LastMap[row][col] = map[row][col];
+		}
+	}
+
+	//向左移动所有的块
 	for (int row = 0;row<GAME_ROWS; row++)
 	{
 		for (int col = 0;col<GAME_COLS;col++)
@@ -469,7 +501,7 @@ void GameScene::moveLeft()
 					}
 					else
 					{
-						
+
 						//判断是否可以消除
 						int numObj = m_allTile.at(map[row][col1-1]-1)->m_number;
 						int numNow = m_allTile.at(map[row][col1]-1)->m_number;
@@ -507,8 +539,17 @@ void GameScene::moveLeft()
 
 void GameScene::moveRight()
 {
-	//向右移动所有的块
+	//先记录各砖块状态
 	m_LastAllTile = m_allTile;
+	for (int row = 0; row<GAME_ROWS; row++)
+	{
+		for (int col = 0; col<GAME_COLS; col++)
+		{
+			LastMap[row][col] = map[row][col];
+		}
+	}
+
+	//向右移动所有的块
 	for (int row = 0;row<GAME_ROWS; row++)
 	{
 		for (int col = GAME_COLS-1;col>=0;col--)
@@ -528,7 +569,7 @@ void GameScene::moveRight()
 					}
 					else
 					{
-						
+
 						//判断是否可以消除
 						int numObj = m_allTile.at(map[row][col1+1]-1)->m_number;
 						int numNow = m_allTile.at(map[row][col1]-1)->m_number;
@@ -567,11 +608,143 @@ void GameScene::moveRight()
 void GameScene::backCallback(cocos2d::Ref* pSender)
 {
 	/*
-			1.现在来看只好先记住各个砖块的排名，即map[row][col]
-			2.m_allTile = m_LastAllTile
-			3.最后利用m_number来重新铺设真实砖块
-			
+	1.现在来看只好先记住各个砖块的排名，即map[row][col]
+	2.m_allTile = m_LastAllTile
+	3.最后利用m_number来重新铺设真实砖块
+
 	map[m_allTile.m_row[m_allTile.m_col] = 0;
 
 	m_allTile = m_LastAllTile;*/
+
+
+	//利用m_LastAllTile重新铺设砖块
+
+	for (int row = 0; row<GAME_ROWS; row++)
+	{
+		for (int col = 0; col<GAME_COLS; col++)
+		{
+			if (LastMap[row][col]!=map[row][col])
+			{
+				if(LastMap[row][col]!=0)
+				{
+					auto tile = MovedTile::create();
+					tile->moveTo(row,col);
+					/*auto bk = LayerColor::create(Color4B(255, 0, 156, 200) ,GAME_TILE_WIDTH,GAME_TILE_HEIGHT);
+					bk->setPosition(GAME_TILE_WIDTH*col + GAME_TILE_GAP*(col+1), 
+						GAME_TILE_HEIGHT*row + GAME_TILE_GAP*(row+1));*/
+					colorBack->addChild(tile);
+					//利用核心数据结构map[row][col] = m_allTile.getIndex(tile)+1获得当前位置原方块
+					auto LastTile = m_LastAllTile.at(LastMap[row][col]-1);
+					auto label = Label::createWithTTF(__String::createWithFormat("%d",LastTile->m_number)->getCString(),"fonts/arial.ttf",40);
+					tile->m_number = LastTile->m_number;
+					auto bk = static_cast<LayerColor*>(tile->getChildByTag(110));
+					//判断颜色
+					switch (tile->m_number) {
+					case 2:
+						bk->setColor(Color3B(230,220,210));
+						break;
+					case 4:
+						bk->setColor(Color3B(230,210,190));
+						break;
+					case 8:
+						bk->setColor(Color3B(230,150,100));
+						label->setColor(Color3B(255,255,255));
+						break;
+					case 16:
+						bk->setColor(Color3B(230,120,80));
+						label->setColor(Color3B(255,255,255));
+						break;
+					case 32:
+						bk->setColor(Color3B(230,100,90));
+						label->setColor(Color3B(255,255,255));
+						break;
+					case 64:
+						bk->setColor(Color3B(230,70,60));
+						label->setColor(Color3B(255,255,255));
+						break;
+					case 128:
+						label->setScale(0.8f);
+						bk->setColor(Color3B(230,190,60));
+						label->setColor(Color3B(255,255,255));
+						break;
+					case 256:
+						bk->setColor(Color3B(230,190,60));
+						label->setColor(Color3B(255,255,255));
+						break;
+					case 512:
+						bk->setColor(Color3B(230,190,60));
+						label->setColor(Color3B(255,255,255));
+						break;
+					case 1024:
+						label->setScale(0.7f);
+						break;
+					case 2048:
+						/*label->setScale(0.7);*///在1024已经放缩，再放缩就不合适了
+						bk->setColor(Color3B(210,180,30));
+						label->setColor(Color3B(255,255,255));
+						break;
+					default:
+						break;
+					}
+					label->setColor(Color3B::BLACK);
+					label->setPosition(GAME_TILE_WIDTH/2,GAME_TILE_HEIGHT/2);
+					bk->addChild(label);
+					map[row][col] = LastMap[row][col];
+					
+				}
+				else
+				{
+					colorBack->removeChildByTag(map[row][col]);
+					map[row][col] = LastMap[row][col];
+				}
+			}
+		}
+	}
+	/*
+	for (int i =0; i<m_LastAllTile.size();i++)
+	{
+	if (m_LastAllTile.at(i)->m_number>0)//证明此处原来有块
+	{
+	/ *auto tile = MovedTile::create();
+	auto label = static_cast<Label*>(tile->getChildByTag(10));
+	label->setString(__String::createWithFormat("%d",m_LastAllTile.at(i)->m_number)->getCString());* /
+	auto bk = LayerColor::create(Color4B(255, 0, 156, 200) ,GAME_TILE_WIDTH,GAME_TILE_HEIGHT);
+	this->addChild(bk);
+	}
+	}*/
+
+	/*//初始化网格的每一个块
+	//背景层
+	auto bk = LayerColor::create(Color4B(255, 0, 156, 200) ,GAME_TILE_WIDTH,GAME_TILE_HEIGHT);
+	this->addChild(bk);
+	bk->setTag(110);
+
+	//数字层
+	int n = rand()%10;
+	this->m_number = n>0 ? 2:4; //n为0-9，n为0的情况占10%，4出现的概率为10%
+	auto label = Label::createWithTTF(__String::createWithFormat("%d",m_number)->getCString(),"fonts/arial.ttf",40);
+	switch (this->m_number) {
+	case 2:
+	bk->setColor(Color3B(255, 0, 156));
+	case 4:
+	bk->setColor(Color3B(230,210,190));
+	break;
+	}
+	label->setColor(Color3B::BLACK);
+	label->setPosition(GAME_TILE_WIDTH/2,GAME_TILE_HEIGHT/2);
+	bk->addChild(label);
+	label->setTag(10);*/
+
+	//再返回各砖块状态
+	m_allTile = m_LastAllTile;//m_allTile到底有没有把tile存进去
+	/*
+	for (int row = 0; row<GAME_ROWS; row++)
+	{
+	for (int col = 0; col<GAME_COLS; col++)
+	{
+	map[row][col] = LastMap[row][col];
+	}
+	}*/
+
+
 }

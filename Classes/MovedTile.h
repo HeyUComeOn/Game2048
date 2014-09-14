@@ -16,6 +16,7 @@ public:
 	int m_row;
 	int m_col;
 	int m_number;
+	void firstInit();
 	void showAt(int r, int c);//在某个位置显示这个块
 	void moveTo(int r, int c);//移动到r行 c列
 	void doubleNumber();//翻倍
