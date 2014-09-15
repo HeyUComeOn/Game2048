@@ -112,6 +112,10 @@ bool GameScene::init()
 	auto backSpace = LayerColor::create(Color4B(70,70,70,255),46,32);
 	backSpace->setPosition(GAME_SCREEN_WIDTH/2-backWidth/2 ,
 		GAME_SCREEN_HEIGHT/2+backHeight/2);
+
+	//ÔÝÊ±¸éÖÃ
+	backSpace->setVisible(false);
+
 	addChild(backSpace);
 	auto itemBack = MenuItemImage::create("btn-back-0.png", "btn-back-1.png", 
 		CC_CALLBACK_1(GameScene::backCallback,this));
