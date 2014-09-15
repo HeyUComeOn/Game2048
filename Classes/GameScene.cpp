@@ -333,8 +333,8 @@ void GameScene::newMoveTile()
 
 void GameScene::moveUp()//从此看起
 {
-/*//先记录各砖块状态，bug:这一句并没有实现这个功能，因为经调试发现存储的是同一组元素，m_allTile的元素变化，m_LastAllTile的元素就变化
-	
+	/*//先记录各砖块状态，bug:这一句并没有实现这个功能，因为经调试发现存储的是同一组元素，m_allTile的元素变化，m_LastAllTile的元素就变化
+
 	m_LastAllTile = m_allTile;*/
 
 	//先记录各砖块状态
@@ -358,14 +358,14 @@ void GameScene::moveUp()//从此看起
 		}
 	}
 
-/*
-	
+	/*
+
 	for (int row = 0; row<GAME_ROWS; row++)
 	{
-		for (int col = 0; col<GAME_COLS; col++)
-		{
-			LastMap[row][col] = map[row][col];
-		}
+	for (int col = 0; col<GAME_COLS; col++)
+	{
+	LastMap[row][col] = map[row][col];
+	}
 	}*/
 
 	//向上移动所有的块
@@ -429,7 +429,7 @@ void GameScene::moveUp()//从此看起
 void GameScene::moveDown()
 {
 	/*//先记录各砖块状态，bug:这一句并没有实现这个功能，因为经调试发现存储的是同一组元素，m_allTile的元素变化，m_LastAllTile的元素就变化
-	
+
 	m_LastAllTile = m_allTile;*/
 
 	//先记录各砖块状态
@@ -453,14 +453,14 @@ void GameScene::moveDown()
 		}
 	}
 
-/*
-	
+	/*
+
 	for (int row = 0; row<GAME_ROWS; row++)
 	{
-		for (int col = 0; col<GAME_COLS; col++)
-		{
-			LastMap[row][col] = map[row][col];
-		}
+	for (int col = 0; col<GAME_COLS; col++)
+	{
+	LastMap[row][col] = map[row][col];
+	}
 	}*/
 
 	//向下移动所有的块
@@ -522,7 +522,7 @@ void GameScene::moveDown()
 void GameScene::moveLeft()
 {
 	/*//先记录各砖块状态，bug:这一句并没有实现这个功能，因为经调试发现存储的是同一组元素，m_allTile的元素变化，m_LastAllTile的元素就变化
-	
+
 	m_LastAllTile = m_allTile;*/
 
 	//先记录各砖块状态
@@ -546,14 +546,14 @@ void GameScene::moveLeft()
 		}
 	}
 
-/*
-	
+	/*
+
 	for (int row = 0; row<GAME_ROWS; row++)
 	{
-		for (int col = 0; col<GAME_COLS; col++)
-		{
-			LastMap[row][col] = map[row][col];
-		}
+	for (int col = 0; col<GAME_COLS; col++)
+	{
+	LastMap[row][col] = map[row][col];
+	}
 	}*/
 
 	//向左移动所有的块
@@ -615,7 +615,7 @@ void GameScene::moveLeft()
 void GameScene::moveRight()
 {
 	/*//先记录各砖块状态，bug:这一句并没有实现这个功能，因为经调试发现存储的是同一组元素，m_allTile的元素变化，m_LastAllTile的元素就变化
-	
+
 	m_LastAllTile = m_allTile;*/
 
 	//先记录各砖块状态
@@ -639,15 +639,14 @@ void GameScene::moveRight()
 		}
 	}
 
-/*
-	
 	for (int row = 0; row<GAME_ROWS; row++)
 	{
 		for (int col = 0; col<GAME_COLS; col++)
 		{
-			LastMap[row][col] = map[row][col];
+
+			Dlog::showLog("afterMove : map[%d][%d] : %d",row, col, map[row][col]);
 		}
-	}*/
+	}
 
 	//向右移动所有的块
 	for (int row = 0;row<GAME_ROWS; row++)
@@ -719,98 +718,106 @@ void GameScene::backCallback(cocos2d::Ref* pSender)
 
 	//利用m_LastAllTile重新铺设砖块
 	m_allTile.clear();
+
 	for (int row = 0; row<GAME_ROWS; row++)
 	{
 		for (int col = 0; col<GAME_COLS; col++)
 		{
-			if (LastMap[row][col]!=map[row][col])//排名一样但m_number一样也不改变，问题出在这
+			Dlog::showLog("LastMap[%d][%d] : %d",row, col, LastMap[row][col]);
+			Dlog::showLog("map[%d][%d] : %d",row, col, map[row][col]);
+
+
+			if (map[row][col]>0)//如果现版本有元素就删除
 			{
-				if(LastMap[row][col]!=0)
-				{
-					if (map[row][col]>0)//to be tested
-					{
-						colorBack->removeChildByTag(map[row][col],true);
-					}
-					
-					auto tile = MovedTile::create();
-					tile->showAt(row,col);
-					/*auto bk = LayerColor::create(Color4B(255, 0, 156, 200) ,GAME_TILE_WIDTH,GAME_TILE_HEIGHT);
-					bk->setPosition(GAME_TILE_WIDTH*col + GAME_TILE_GAP*(col+1), 
-						GAME_TILE_HEIGHT*row + GAME_TILE_GAP*(row+1));*/
-					colorBack->addChild(tile);
-					//利用核心数据结构map[row][col] = m_allTile.getIndex(tile)+1获得当前位置原方块
-					auto LastTile = m_LastAllTile.at(LastMap[row][col]-1);
-					auto label = Label::createWithTTF(__String::createWithFormat("%d",LastTile->m_number)->getCString(),"fonts/arial.ttf",40);
-					tile->m_number = LastTile->m_number;
-					auto bk = static_cast<LayerColor*>(tile->getChildByTag(110));
-					//判断颜色
-					switch (tile->m_number) {
-					case 2:
-						bk->setColor(Color3B(230,220,210));
-						break;
-					case 4:
-						bk->setColor(Color3B(230,210,190));
-						break;
-					case 8:
-						bk->setColor(Color3B(230,150,100));
-						label->setColor(Color3B(255,255,255));
-						break;
-					case 16:
-						bk->setColor(Color3B(230,120,80));
-						label->setColor(Color3B(255,255,255));
-						break;
-					case 32:
-						bk->setColor(Color3B(230,100,90));
-						label->setColor(Color3B(255,255,255));
-						break;
-					case 64:
-						bk->setColor(Color3B(230,70,60));
-						label->setColor(Color3B(255,255,255));
-						break;
-					case 128:
-						label->setScale(0.8f);
-						bk->setColor(Color3B(230,190,60));
-						label->setColor(Color3B(255,255,255));
-						break;
-					case 256:
-						bk->setColor(Color3B(230,190,60));
-						label->setColor(Color3B(255,255,255));
-						break;
-					case 512:
-						bk->setColor(Color3B(230,190,60));
-						label->setColor(Color3B(255,255,255));
-						break;
-					case 1024:
-						label->setScale(0.7f);
-						break;
-					case 2048:
-						/*label->setScale(0.7);*///在1024已经放缩，再放缩就不合适了
-						bk->setColor(Color3B(210,180,30));
-						label->setColor(Color3B(255,255,255));
-						break;
-					default:
-						break;
-					}
-					label->setColor(Color3B::BLACK);
-					label->setTag(10);
-					label->setPosition(GAME_TILE_WIDTH/2,GAME_TILE_HEIGHT/2);
-					
-					bk->addChild(label);
-
-
-
-					map[row][col] = LastMap[row][col];
-					tile->setTag(map[row][col]);//to be tested;Done!
-					m_allTile.pushBack(tile);
-				}
-				else
-				{
-					Dlog::showLog("=A========%d",colorBack->getChildrenCount());
-					colorBack->removeChildByTag(map[row][col],true);//删不到那个块
-					Dlog::showLog("=B========%d",colorBack->getChildrenCount());
-					map[row][col] = LastMap[row][col];
-				}
+				
+				colorBack->removeChildByTag(map[row][col],true);
 			}
+
+
+			if(LastMap[row][col]>0)
+			{
+				auto tile = MovedTile::create();
+				tile->showAt(row,col);
+				/*auto bk = LayerColor::create(Color4B(255, 0, 156, 200) ,GAME_TILE_WIDTH,GAME_TILE_HEIGHT);
+				bk->setPosition(GAME_TILE_WIDTH*col + GAME_TILE_GAP*(col+1), 
+				GAME_TILE_HEIGHT*row + GAME_TILE_GAP*(row+1));*/
+				colorBack->addChild(tile);
+				//利用核心数据结构map[row][col] = m_allTile.getIndex(tile)+1获得当前位置原方块
+				auto LastTile = m_LastAllTile.at(LastMap[row][col]-1);
+				auto label = Label::createWithTTF(__String::createWithFormat("%d",LastTile->m_number)->getCString(),"fonts/arial.ttf",40);
+				tile->m_number = LastTile->m_number;
+				auto bk = static_cast<LayerColor*>(tile->getChildByTag(110));
+				//判断颜色
+				switch (tile->m_number) {
+				case 2:
+					bk->setColor(Color3B(230,220,210));
+					break;
+				case 4:
+					bk->setColor(Color3B(230,210,190));
+					break;
+				case 8:
+					bk->setColor(Color3B(230,150,100));
+					label->setColor(Color3B(255,255,255));
+					break;
+				case 16:
+					bk->setColor(Color3B(230,120,80));
+					label->setColor(Color3B(255,255,255));
+					break;
+				case 32:
+					bk->setColor(Color3B(230,100,90));
+					label->setColor(Color3B(255,255,255));
+					break;
+				case 64:
+					bk->setColor(Color3B(230,70,60));
+					label->setColor(Color3B(255,255,255));
+					break;
+				case 128:
+					label->setScale(0.8f);
+					bk->setColor(Color3B(230,190,60));
+					label->setColor(Color3B(255,255,255));
+					break;
+				case 256:
+					bk->setColor(Color3B(230,190,60));
+					label->setColor(Color3B(255,255,255));
+					break;
+				case 512:
+					bk->setColor(Color3B(230,190,60));
+					label->setColor(Color3B(255,255,255));
+					break;
+				case 1024:
+					label->setScale(0.7f);
+					break;
+				case 2048:
+					/*label->setScale(0.7);*///在1024已经放缩，再放缩就不合适了
+					bk->setColor(Color3B(210,180,30));
+					label->setColor(Color3B(255,255,255));
+					break;
+				default:
+					break;
+				}
+				label->setColor(Color3B::BLACK);
+				label->setTag(10);
+				label->setPosition(GAME_TILE_WIDTH/2,GAME_TILE_HEIGHT/2);
+				bk->addChild(label);
+				tile->setTag(map[row][col]);
+				m_allTile.pushBack(tile);
+			}
+			map[row][col] = LastMap[row][col];
+			/*else
+			{
+			Dlog::showLog("=A========%d",colorBack->getChildrenCount());
+			colorBack->removeChildByTag(map[row][col],true);//删不到那个块
+			Dlog::showLog("=B========%d",colorBack->getChildrenCount());
+			map[row][col] = LastMap[row][col];
+			}
+			}
+			else
+			{
+			Dlog::showLog("=A========%d",colorBack->getChildrenCount());
+			colorBack->removeChildByTag(map[row][col],true);
+			Dlog::showLog("=B========%d",colorBack->getChildrenCount());
+			map[row][col] = LastMap[row][col];
+			}*/
 		}
 	}
 	/*
@@ -859,5 +866,12 @@ void GameScene::backCallback(cocos2d::Ref* pSender)
 	}
 	}*/
 
-	
+	for (int row = 0; row<GAME_ROWS; row++)
+	{
+		for (int col = 0; col<GAME_COLS; col++)
+		{
+			
+			Dlog::showLog("after : map[%d][%d] : %d",row, col, map[row][col]);
+		}
+	}
 }
