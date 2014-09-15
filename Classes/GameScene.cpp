@@ -723,10 +723,15 @@ void GameScene::backCallback(cocos2d::Ref* pSender)
 	{
 		for (int col = 0; col<GAME_COLS; col++)
 		{
-			if (LastMap[row][col]!=map[row][col])
+			if (LastMap[row][col]!=map[row][col])//排名一样但m_number一样也不改变，问题出在这
 			{
 				if(LastMap[row][col]!=0)
 				{
+					if (map[row][col]>0)//to be tested
+					{
+						colorBack->removeChildByTag(map[row][col],true);
+					}
+					
 					auto tile = MovedTile::create();
 					tile->showAt(row,col);
 					/*auto bk = LayerColor::create(Color4B(255, 0, 156, 200) ,GAME_TILE_WIDTH,GAME_TILE_HEIGHT);
@@ -792,13 +797,10 @@ void GameScene::backCallback(cocos2d::Ref* pSender)
 					
 					bk->addChild(label);
 
-					if (map[row][col]>0)//to be tested
-					{
-						colorBack->removeChildByTag(map[row][col],true);
-					}
+
 
 					map[row][col] = LastMap[row][col];
-					tile->setTag(map[row][col]);//to be tested
+					tile->setTag(map[row][col]);//to be tested;Done!
 					m_allTile.pushBack(tile);
 				}
 				else
@@ -857,5 +859,5 @@ void GameScene::backCallback(cocos2d::Ref* pSender)
 	}
 	}*/
 
-
+	
 }
