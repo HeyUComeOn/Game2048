@@ -333,15 +333,40 @@ void GameScene::newMoveTile()
 
 void GameScene::moveUp()//从此看起
 {
+/*//先记录各砖块状态，bug:这一句并没有实现这个功能，因为经调试发现存储的是同一组元素，m_allTile的元素变化，m_LastAllTile的元素就变化
+	
+	m_LastAllTile = m_allTile;*/
+
 	//先记录各砖块状态
-	m_LastAllTile = m_allTile;
+	m_LastAllTile.clear();
+	for (int row = 0; row<GAME_ROWS; row++)
+	{
+		for (int col = 0; col<GAME_COLS; col++)
+		{
+			if (map[row][col]!=0)
+			{
+				auto tile = MovedTile::create();
+				tile->moveTo(row,col);
+				tile->m_number = m_allTile.at(map[row][col]-1)->m_number;
+				m_LastAllTile.pushBack(tile);
+				LastMap[row][col] = map[row][col];
+			}
+			else
+			{
+				LastMap[row][col] = 0;
+			}
+		}
+	}
+
+/*
+	
 	for (int row = 0; row<GAME_ROWS; row++)
 	{
 		for (int col = 0; col<GAME_COLS; col++)
 		{
 			LastMap[row][col] = map[row][col];
 		}
-	}
+	}*/
 
 	//向上移动所有的块
 	for (int col = 0;col<GAME_COLS; col++)
@@ -403,15 +428,40 @@ void GameScene::moveUp()//从此看起
 
 void GameScene::moveDown()
 {
+	/*//先记录各砖块状态，bug:这一句并没有实现这个功能，因为经调试发现存储的是同一组元素，m_allTile的元素变化，m_LastAllTile的元素就变化
+	
+	m_LastAllTile = m_allTile;*/
+
 	//先记录各砖块状态
-	m_LastAllTile = m_allTile;
+	m_LastAllTile.clear();
+	for (int row = 0; row<GAME_ROWS; row++)
+	{
+		for (int col = 0; col<GAME_COLS; col++)
+		{
+			if (map[row][col]!=0)
+			{
+				auto tile = MovedTile::create();
+				tile->moveTo(row,col);
+				tile->m_number = m_allTile.at(map[row][col]-1)->m_number;
+				m_LastAllTile.pushBack(tile);
+				LastMap[row][col] = map[row][col];
+			}
+			else
+			{
+				LastMap[row][col] = 0;
+			}
+		}
+	}
+
+/*
+	
 	for (int row = 0; row<GAME_ROWS; row++)
 	{
 		for (int col = 0; col<GAME_COLS; col++)
 		{
 			LastMap[row][col] = map[row][col];
 		}
-	}
+	}*/
 
 	//向下移动所有的块
 	for (int col = 0;col<GAME_COLS; col++)
@@ -471,15 +521,40 @@ void GameScene::moveDown()
 
 void GameScene::moveLeft()
 {
+	/*//先记录各砖块状态，bug:这一句并没有实现这个功能，因为经调试发现存储的是同一组元素，m_allTile的元素变化，m_LastAllTile的元素就变化
+	
+	m_LastAllTile = m_allTile;*/
+
 	//先记录各砖块状态
-	m_LastAllTile = m_allTile;
+	m_LastAllTile.clear();
+	for (int row = 0; row<GAME_ROWS; row++)
+	{
+		for (int col = 0; col<GAME_COLS; col++)
+		{
+			if (map[row][col]!=0)
+			{
+				auto tile = MovedTile::create();
+				tile->moveTo(row,col);
+				tile->m_number = m_allTile.at(map[row][col]-1)->m_number;
+				m_LastAllTile.pushBack(tile);
+				LastMap[row][col] = map[row][col];
+			}
+			else
+			{
+				LastMap[row][col] = 0;
+			}
+		}
+	}
+
+/*
+	
 	for (int row = 0; row<GAME_ROWS; row++)
 	{
 		for (int col = 0; col<GAME_COLS; col++)
 		{
 			LastMap[row][col] = map[row][col];
 		}
-	}
+	}*/
 
 	//向左移动所有的块
 	for (int row = 0;row<GAME_ROWS; row++)
@@ -492,11 +567,11 @@ void GameScene::moveLeft()
 				{
 					if(map[row][col1-1]==0)
 					{
-						//砖块排名
+						//砖块排名传递
 						map[row][col1-1] = map[row][col1];
 						map[row][col1] = 0;
 
-						//实际砖块，减一得下标
+						//砖块排名减一得下标，此时的map[row][col1-1]，如上，是变化过得
 						m_allTile.at(  map[row][col1-1]  - 1)->moveTo(row,col1-1);
 					}
 					else
@@ -539,15 +614,40 @@ void GameScene::moveLeft()
 
 void GameScene::moveRight()
 {
+	/*//先记录各砖块状态，bug:这一句并没有实现这个功能，因为经调试发现存储的是同一组元素，m_allTile的元素变化，m_LastAllTile的元素就变化
+	
+	m_LastAllTile = m_allTile;*/
+
 	//先记录各砖块状态
-	m_LastAllTile = m_allTile;
+	m_LastAllTile.clear();
+	for (int row = 0; row<GAME_ROWS; row++)
+	{
+		for (int col = 0; col<GAME_COLS; col++)
+		{
+			if (map[row][col]!=0)
+			{
+				auto tile = MovedTile::create();
+				tile->moveTo(row,col);
+				tile->m_number = m_allTile.at(map[row][col]-1)->m_number;
+				m_LastAllTile.pushBack(tile);
+				LastMap[row][col] = map[row][col];
+			}
+			else
+			{
+				LastMap[row][col] = 0;
+			}
+		}
+	}
+
+/*
+	
 	for (int row = 0; row<GAME_ROWS; row++)
 	{
 		for (int col = 0; col<GAME_COLS; col++)
 		{
 			LastMap[row][col] = map[row][col];
 		}
-	}
+	}*/
 
 	//向右移动所有的块
 	for (int row = 0;row<GAME_ROWS; row++)
@@ -618,7 +718,7 @@ void GameScene::backCallback(cocos2d::Ref* pSender)
 
 
 	//利用m_LastAllTile重新铺设砖块
-
+	m_allTile.clear();
 	for (int row = 0; row<GAME_ROWS; row++)
 	{
 		for (int col = 0; col<GAME_COLS; col++)
@@ -628,7 +728,7 @@ void GameScene::backCallback(cocos2d::Ref* pSender)
 				if(LastMap[row][col]!=0)
 				{
 					auto tile = MovedTile::create();
-					tile->moveTo(row,col);
+					tile->showAt(row,col);
 					/*auto bk = LayerColor::create(Color4B(255, 0, 156, 200) ,GAME_TILE_WIDTH,GAME_TILE_HEIGHT);
 					bk->setPosition(GAME_TILE_WIDTH*col + GAME_TILE_GAP*(col+1), 
 						GAME_TILE_HEIGHT*row + GAME_TILE_GAP*(row+1));*/
@@ -687,14 +787,25 @@ void GameScene::backCallback(cocos2d::Ref* pSender)
 						break;
 					}
 					label->setColor(Color3B::BLACK);
+					label->setTag(10);
 					label->setPosition(GAME_TILE_WIDTH/2,GAME_TILE_HEIGHT/2);
-					bk->addChild(label);
-					map[row][col] = LastMap[row][col];
 					
+					bk->addChild(label);
+
+					if (map[row][col]>0)//to be tested
+					{
+						colorBack->removeChildByTag(map[row][col],true);
+					}
+
+					map[row][col] = LastMap[row][col];
+					tile->setTag(map[row][col]);//to be tested
+					m_allTile.pushBack(tile);
 				}
 				else
 				{
-					colorBack->removeChildByTag(map[row][col]);
+					Dlog::showLog("=A========%d",colorBack->getChildrenCount());
+					colorBack->removeChildByTag(map[row][col],true);//删不到那个块
+					Dlog::showLog("=B========%d",colorBack->getChildrenCount());
 					map[row][col] = LastMap[row][col];
 				}
 			}
@@ -736,7 +847,7 @@ void GameScene::backCallback(cocos2d::Ref* pSender)
 	label->setTag(10);*/
 
 	//再返回各砖块状态
-	m_allTile = m_LastAllTile;//m_allTile到底有没有把tile存进去
+	//m_allTile = m_LastAllTile;//m_allTile到底有没有把tile存进去
 	/*
 	for (int row = 0; row<GAME_ROWS; row++)
 	{
