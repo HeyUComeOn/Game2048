@@ -62,6 +62,7 @@ bool GameScene::init()
 	this->addChild(mn,1);
 	//起始喇叭开启
 	UserDefault::getInstance()->setBoolForKey("loseMusicOff",false);
+	UserDefault::getInstance()->setBoolForKey("effectsOff",false);
 
 	//加载判断是否到2048的数据
 	UserDefault::getInstance()->setBoolForKey("On2048",false);
@@ -176,10 +177,12 @@ void GameScene::soundCallback(Ref* pSender)
 	case 0:
 		SimpleAudioEngine::getInstance()->resumeAllEffects();
 		UserDefault::getInstance()->setBoolForKey("loseMusicOff",false);
+		UserDefault::getInstance()->setBoolForKey("effectsOff",false);
 		break;
 	case 1:
 		SimpleAudioEngine::getInstance()->pauseAllEffects();
 		UserDefault::getInstance()->setBoolForKey("loseMusicOff",true);
+		UserDefault::getInstance()->setBoolForKey("effectsOff",true);
 		break;
 	default:
 		break;
@@ -209,14 +212,18 @@ void GameScene::moveAllTile(E_MOVE_DIRECT direct)
 		break;
 	}
 	//播放音乐
-	if (m_sound_clear)
+	if (!UserDefault::getInstance()->getBoolForKey("loseMusicOff"))
 	{
-		SimpleAudioEngine::getInstance()->playEffect("musics/clear.wav");
+		if (m_sound_clear)
+		{
+			SimpleAudioEngine::getInstance()->playEffect("musics/clear.wav");
+		}
+		else
+		{
+			SimpleAudioEngine::getInstance()->playEffect("musics/move.wav");
+		}
 	}
-	else
-	{
-		SimpleAudioEngine::getInstance()->playEffect("musics/move.wav");
-	}
+
 	//分数变化
 	auto labelScore = (Label *)this->getChildByTag(120);
 	labelScore->setString(__String::createWithFormat("score:%d",m_score)->getCString());
