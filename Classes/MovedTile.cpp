@@ -44,6 +44,8 @@ bool MovedTile::init()
 void MovedTile::firstInit()
 {
 	//数字层
+	srand ((unsigned)time(nullptr));//利用时间改变随机种子
+
 	int n = rand()%10;
 	this->m_number = n>0 ? 2:4; //n为0-9，n为0的情况占10%，4出现的概率为10%
 	auto label = Label::createWithTTF(__String::createWithFormat("%d",m_number)->getCString(),"fonts/arial.ttf",40);
