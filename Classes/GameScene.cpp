@@ -54,10 +54,10 @@ bool GameScene::init()
 	//显示游戏声音控制菜单
 	auto item1 = MenuItemImage::create("sound.png","sound.png");
 	auto item2 = MenuItemImage::create("soundOff.png","soundOff.png");
-	auto mntoggle = MenuItemToggle::createWithCallback(CC_CALLBACK_1(GameScene::soundCallback,this),item1,item2,NULL);
+	auto mntoggle = MenuItemToggle::createWithCallback(CC_CALLBACK_1(GameScene::soundCallback,this),item1,item2,nullptr);
 	mntoggle->setPosition(GAME_SCREEN_WIDTH-mntoggle->getContentSize().width/2 ,
 		GAME_SCREEN_HEIGHT-mntoggle->getContentSize().height/2);
-	auto mn = Menu::create(mntoggle,NULL);
+	auto mn = Menu::create(mntoggle,nullptr);
 	mn->setPosition(Point::ZERO);
 	this->addChild(mn,1);
 	//起始喇叭开启

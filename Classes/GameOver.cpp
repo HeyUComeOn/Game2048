@@ -61,7 +61,7 @@ bool GameOver::init()
 	auto labelItem = MenuItemLabel::create(labelRe,
 		CC_CALLBACK_1(GameOver::menuCallBack,this));
 	labelItem->setPosition(GAME_SCREEN_WIDTH/2,GAME_SCREEN_HEIGHT/4);
-	auto menu = Menu::create(labelItem, NULL);
+	auto menu = Menu::create(labelItem, nullptr);
 	menu->setPosition(Point::ZERO);
 	addChild(menu);
 	return true;

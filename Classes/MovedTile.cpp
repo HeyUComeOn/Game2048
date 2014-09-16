@@ -72,7 +72,7 @@ void MovedTile::showAt(int r, int c)
 					ScaleTo::create(0.15f,0.8f),
 					ScaleTo::create(0.15f,1.2f),
 					ScaleTo::create(0.15f,1.0f),
-					NULL)
+					nullptr)
 					);
 }
 
@@ -95,7 +95,7 @@ void MovedTile::doubleNumber()
 		ScaleTo::create(0.15f,0.8f),
 		ScaleTo::create(0.15f,1.2f),
 		ScaleTo::create(0.15f,1.0f),
-		NULL)
+		nullptr)
 		);
 
 	switch (this->m_number) {
