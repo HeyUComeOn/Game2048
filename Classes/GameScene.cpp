@@ -60,9 +60,14 @@ bool GameScene::init()
 	auto mn = Menu::create(mntoggle,nullptr);
 	mn->setPosition(Point::ZERO);
 	this->addChild(mn,1);
-	//起始喇叭开启
-	UserDefault::getInstance()->setBoolForKey("loseMusicOff",false);
-	UserDefault::getInstance()->setBoolForKey("effectsOff",false);
+	if (!UserDefault::getInstance()->getBoolForKey("loseMusicOff"))
+	{
+		mntoggle->setSelectedIndex(0);
+	}
+	else
+	{
+		mntoggle->setSelectedIndex(1);
+	}
 
 	//加载判断是否到2048的数据
 	UserDefault::getInstance()->setBoolForKey("On2048",false);
@@ -105,11 +110,19 @@ bool GameScene::init()
 			map[i][j] = 0;//空白
 		}
 	}
+	return true;
+}
+
+void  GameScene::onEnterTransitionDidFinish()
+{
+	Layer::onEnterTransitionDidFinish();
 
 	//初始化数字块
 	newMoveTile();
 
 	//添加反悔按钮
+	auto backWidth = GAME_TILE_WIDTH*GAME_COLS+GAME_TILE_GAP*(GAME_COLS+1);
+	auto backHeight = GAME_TILE_HEIGHT*GAME_ROWS+GAME_TILE_GAP*(GAME_ROWS+1);
 	auto backSpace = LayerColor::create(Color4B(70,70,70,255),46,32);
 	backSpace->setPosition(GAME_SCREEN_WIDTH/2-backWidth/2 ,
 		GAME_SCREEN_HEIGHT/2+backHeight/2);
@@ -166,7 +179,6 @@ bool GameScene::init()
 	};
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(m_Event, this);
 
-	return true;
 }
 
 void GameScene::soundCallback(Ref* pSender)
