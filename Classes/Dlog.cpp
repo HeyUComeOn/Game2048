@@ -2,7 +2,7 @@
 
 USING_NS_CC;
 
-static bool isOpen = false;
+static bool isOpen = true;
 
 
 void Dlog::_log(const char *format, va_list args)

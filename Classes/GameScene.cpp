@@ -8,6 +8,7 @@
 using namespace CocosDenshion;
 USING_NS_CC;
 
+
 GameScene::GameScene()
 {
 }
@@ -20,6 +21,7 @@ GameScene::~GameScene()
 void GameScene::onExit()
 {
 	Layer::onExit();
+	
 	Director::getInstance()->getEventDispatcher()->removeEventListener(static_cast<EventListener*>(m_Event));
 }
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+   "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+		<key>lblHighScore</key>
+        <string>最高分：</string>
+		<key>lblGoOn</key>
+        <string>继续</string>
+		<key>lblRestart</key>
+        <string>重新开始</string>
+		<key>lblLogin</key>
+        <string>点击屏幕登陆游戏</string>
+    </dict>
+</plist>

@@ -17,6 +17,11 @@ public:
 
 	CREATE_FUNC(GameOver);
 	void menuCallBack(cocos2d::Ref* ref);
+
+	void restartGame(float);
+
+	static bool isTurn;
+
 private:
 
 };
