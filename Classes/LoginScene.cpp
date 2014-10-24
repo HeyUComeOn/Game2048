@@ -166,7 +166,7 @@ extern "C" {
 	JNIEXPORT void JNICALL Java_org_cocos2dx_cpp_AppActivity_startGameScene
 		(JNIEnv *, jclass) {
 
-			//实现的方法下面自己发挥--参数也可以使用
+			
 
 			Dlog::showLog("responds = %s","===============>test_JNI_JAVA");
 
